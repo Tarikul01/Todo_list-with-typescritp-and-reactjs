@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import Input from './components/Input';
+import model from  './components/Modals';
+import Singletodo from './components/Singletodo';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App: React.FC= ()=>{
+  const [todo,setTodo]=useState<string>('');
+  const [todos,setTodos]=useState<model[]>([]);
+  const onHandle=(e: React.FormEvent<EventTarget>)=>{
+      e.preventDefault();
+      if(todo){
+              setTodos([...todos,{id:Date.now(),todo:todo,isDone:false}]);
+              setTodo("");
+      }
+
+
+  }
+
+	return (
+		<div className='App'>
+			<header className='App-header'>
+				<h1>Todo Lists</h1>
+			</header>
+      <div className='todo' >
+        <Input  todo={todo} setTodo={setTodo} onHandle={onHandle}/>
+      </div>
+      <div className="todolist">
+          {todos.map((todo)=>
+           <Singletodo key={todo.id}  todo={todo} todos={todos} setTodos={setTodos} />
+          // <li>{todo.todo}</li>
+           ) }
+      </div>
+		</div>
+	);
 }
 
 export default App;
